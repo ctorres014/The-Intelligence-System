@@ -1,0 +1,1044 @@
+[
+  {
+    "scenario": "1. RAG puro",
+    "elapsed_s": 89.1,
+    "response": {
+      "thread_id": "d514e6a074f84842",
+      "status": "completed",
+      "answer": "El **Reciprocal Rank Fusion (RRF)** es el algoritmo de fusión de rankings más comúnmente utilizado en la búsqueda híbrida [hybrid_search#6]. Su propósito principal es combinar múltiples listas de resultados ordenados sin requerir normalización de puntuaciones (*scores*), lo que lo hace muy robusto ante distribuciones de puntajes diferentes y simple de implementar [hybrid_search#7].\n\n### ¿Cómo combina BM25 con la búsqueda vectorial?\n\nPara fusionar los resultados de un retriever léxico como **BM25** (basado en frecuencias de términos y TF-IDF) con los de una **búsqueda vectorial** (búsqueda semántica), RRF opera de la siguiente manera:\n\n1. **Independencia de puntajes numéricos:** No compara ni depende de las métricas numéricas directas de cada buscador (las cuales pueden tener escalas completamente distintas), sino que evalúa **únicamente la posición relativa (el ranking)** en la que aparece cada documento dentro de cada lista [hybrid_search#6, hybrid_search#7].\n2. **Aplicación de la fórmula de RRF:** Para cada documento $d$ encontrado en las distintas listas, se calcula un puntaje final acumulado utilizando la siguiente ecuación [hybrid_search#6]:\n\n$$\\text{RRF\\_score}(d) = \\sum \\frac{1}{k + \\text{rank}_i(d)}$$\n\nDonde:\n* $\\text{rank}_i(d)$ es la posición (ranking) del documento $d$ en la lista generada por el retriever $i$ (por ejemplo, la lista de BM25 o la lista del retriever vectorial) [hybrid_search#6].\n* $k$ es una constante de suavizado cuyo valor por defecto es $60$ [hybrid_search#6]. Evita que los documentos con posiciones muy altas dominen desproporcionadamente el puntaje y mitiga el impacto de los primeros puestos.\n\n### Implementación práctica\nEn frameworks de desarrollo como **LangChain**, esta combinación se implementa de manera directa utilizando herramientas como `EnsembleRetriever`, permitiendo integrar un `BM25Retriever` y un retriever basado en vectores (por ejemplo, conectado a una base de datos vectorial) bajo este esquema de fusión [hybrid_search#5].",
+      "sources": [
+        {
+          "ref": "[hybrid_search#7]",
+          "source": "hybrid_search.md",
+          "doc_id": "hybrid_search",
+          "section": "Reciprocal Rank Fusion (RRF)",
+          "score": 0.016288,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Ventajas de RRF\n- No requiere normalización de scores\n- Robusto ante distribuciones de scores diferentes\n- Simple de implementar"
+        },
+        {
+          "ref": "[hybrid_search#6]",
+          "source": "hybrid_search.md",
+          "doc_id": "hybrid_search",
+          "section": "Reciprocal Rank Fusion (RRF)",
+          "score": 0.016235,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Reciprocal Rank Fusion (RRF)  \nRRF es el algoritmo de fusión de rankings más común. Dado un conjunto de listas de rankings:  \n```\nRRF_score(d) = Σ 1 / (k + rank_i(d))\n```  \nDonde `k = 60` es una constante de suavizado y `rank_i(d)` es la…"
+        },
+        {
+          "ref": "[hybrid_search#2]",
+          "source": "hybrid_search.md",
+          "doc_id": "hybrid_search",
+          "section": "BM25 (Best Match 25)",
+          "score": 0.015774,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## BM25 (Best Match 25)  \nBM25 es un algoritmo de ranking léxico basado en TF-IDF (Term Frequency-Inverse Document Frequency) con mejoras:"
+        },
+        {
+          "ref": "[hybrid_search#5]",
+          "source": "hybrid_search.md",
+          "doc_id": "hybrid_search",
+          "section": "EnsembleRetriever en LangChain",
+          "score": 0.015724,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## EnsembleRetriever en LangChain  \nLangChain provee `EnsembleRetriever` para combinar múltiples retrievers mediante fusión de rankings con Reciprocal Rank Fusion (RRF):  \n```python\nfrom langchain.retrievers import EnsembleRetriever\nfrom la…"
+        },
+        {
+          "ref": "[hybrid_search#4]",
+          "source": "hybrid_search.md",
+          "doc_id": "hybrid_search",
+          "section": "BM25 (Best Match 25)",
+          "score": 0.015385,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Parámetros\n- `k1 = 1.5`: controla la saturación de la frecuencia del término\n- `b = 0.75`: penalización por longitud del documento"
+        }
+      ],
+      "agents_used": [
+        "knowledge"
+      ],
+      "steps": [
+        {
+          "node": "supervisor",
+          "summary": "política RAG-first: anclar la respuesta en la base de conocimiento interna",
+          "decision": "knowledge",
+          "timestamp": "2026-10-26T15:24:14.774647+00:00"
+        },
+        {
+          "node": "knowledge",
+          "summary": "5 fragmentos recuperados. Resumen estructurado de los hallazgos en la base de conocimiento interna:\n\n- **Definición de Reciprocal Rank Fusion (RRF):** Es el algoritmo de fusión de rankings más común [hybrid_search#6]. No requiere normalización de scores, es robusto ante distribuciones de scores diferentes y es simple de implementar [hybrid_search#7].\n- **Fórmula de RRF:** \n  $$\\text{RRF\\_score}(d) = \\sum \\frac{1}{k + \\text{rank}_i(d)}$$\n  Donde $k = 60$ es una constante de suavizado y $\\text{ran",
+          "decision": null,
+          "timestamp": "2026-10-26T15:25:05.633687+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "La base de conocimiento interna ya proporcionó una definición clara de Reciprocal Rank Fusion, su fórmula con la constante de suavizado y cómo combina los resultados de BM25 y la búsqueda vectorial mediante posiciones relativas. No se requiere más información.",
+          "decision": "FINISH",
+          "timestamp": "2026-10-26T15:25:23.400619+00:00"
+        },
+        {
+          "node": "synthesizer",
+          "summary": "El **Reciprocal Rank Fusion (RRF)** es el algoritmo de fusión de rankings más comúnmente utilizado en la búsqueda híbrida [hybrid_search#6]. Su propósito principal es combinar múltiples listas de resu…",
+          "decision": null,
+          "timestamp": "2026-10-26T15:25:43.796584+00:00"
+        }
+      ],
+      "iterations": 2,
+      "pending_approval": null,
+      "latency_ms": 89048
+    }
+  },
+  {
+    "scenario": "2. RAG + cálculo",
+    "elapsed_s": 184.2,
+    "response": {
+      "thread_id": "calc-1793028343",
+      "status": "completed",
+      "answer": "Según nuestra documentación, el modelo **`text-embedding-3-small`** posee **1536 dimensiones** [embeddings_and_chunking#1, vector_databases#4].\n\nA continuación, te presento el cálculo detallado del espacio de almacenamiento necesario para 2 millones de esos vectores en formato `float32` (4 bytes por dimensión):\n\n### Supuestos del cálculo\n* **Cantidad de vectores:** 2.000.000\n* **Dimensiones por vector:** 1536\n* **Tamaño por dimensión (`float32`):** 4 bytes\n\n### Fórmula\n$$\\text{Espacio total} = \\text{Cantidad de vectores} \\times \\text{Dimensiones} \\times \\text{Bytes}$$\n$$\\text{Espacio total} = 2.000.000 \\times 1536 \\times 4 = 12.288.000.000 \\text{ bytes}$$\n\n### Números finales según la unidad de medida\n* **En bytes:** **12.288.000.000 bytes**\n* **En Gigabytes (Decimal / Sistema Internacional: $1 \\text{ GB} = 10^9 \\text{ bytes}$):** **12,29 GB** \n* **En Gibibytes (Binario: $1 \\text{ GiB} = 1024^3 \\text{ bytes} \\approx 1.073.741.824 \\text{ bytes}$):** **11,44 GiB**",
+      "sources": [
+        {
+          "ref": "[embeddings_and_chunking#1]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "Modelos de embedding populares",
+          "score": 0.016393,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Modelos de embedding populares  \n### OpenAI\n- **text-embedding-3-small**: 1536 dimensiones, excelente relación calidad/costo\n- **text-embedding-3-large**: 3072 dimensiones, mayor precisión\n- **text-embedding-ada-002**: 1536 dimensiones (…"
+        },
+        {
+          "ref": "[vector_databases#4]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Conceptos clave en Pinecone",
+          "score": 0.015827,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Conceptos clave en Pinecone  \n### Índice (Index)\nUn índice es la unidad principal de almacenamiento en Pinecone. Al crear un índice se define:\n- **Dimensión**: El número de dimensiones del vector (ej. 1536 para text-embedding-3-small de …"
+        },
+        {
+          "ref": "[embeddings_and_chunking#2]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "Modelos de embedding populares",
+          "score": 0.015321,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Open Source\n- **sentence-transformers/all-MiniLM-L6-v2**: 384 dims, muy rápido, ideal para CPU\n- **BAAI/bge-large-en-v1.5**: 1024 dims, alta calidad\n- **intfloat/multilingual-e5-large**: Soporte multilingüe"
+        },
+        {
+          "ref": "[langchain_overview#7]",
+          "source": "langchain_overview.md",
+          "doc_id": "langchain_overview",
+          "section": "Integración con Pinecone",
+          "score": 0.014921,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Integración con Pinecone  \n```python\nfrom langchain_pinecone import PineconeVectorStore\nfrom langchain_openai import OpenAIEmbeddings\n\nembeddings = OpenAIEmbeddings(model=\"text-embedding-3-small\")\nvectorstore = PineconeVectorStore.from_e…"
+        },
+        {
+          "ref": "[embeddings_and_chunking#5]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "Estrategias de chunking",
+          "score": 0.014756,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Recursive Character Text Splitter\nIntenta dividir por separadores jerárquicos: primero párrafos (`\\n\\n`), luego saltos de línea (`\\n`), luego oraciones, finalmente por caracteres. Es la estrategia más común y recomendada para texto gene…"
+        }
+      ],
+      "agents_used": [
+        "knowledge",
+        "analyst"
+      ],
+      "steps": [
+        {
+          "node": "supervisor",
+          "summary": "política RAG-first: anclar la respuesta en la base de conocimiento interna",
+          "decision": "knowledge",
+          "timestamp": "2026-10-26T15:25:43.822504+00:00"
+        },
+        {
+          "node": "knowledge",
+          "summary": "5 fragmentos recuperados. Resumen de hallazgos en la base de conocimiento interna:\n\n- **Dimensiones de `text-embedding-3-small`**: El modelo posee **1536 dimensiones** [embeddings_and_chunking#1, vector_databases#4].\n- **Cálculo de almacenamiento**: \n  - Cantidad de vectores: 2.000.000\n  - Dimensiones por vector: 1536\n  - Bytes por dimensión (`float32`): 4 bytes\n  - Espacio total en bytes = $2.000.000 \\times 1536 \\times 4 = 12.288.000.000 \\text{ bytes}$\n  - Conversión a GB (utilizando 1 GB = $10",
+          "decision": null,
+          "timestamp": "2026-10-26T15:26:16.446733+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "cobertura: la consulta pide un cálculo explícito",
+          "decision": "analyst",
+          "timestamp": "2026-10-26T15:26:39.673007+00:00"
+        },
+        {
+          "node": "analyst",
+          "summary": "**Análisis y Resultados:**\n\n1. **Dimensiones del modelo:**\n   - Según la documentación interna (`embeddings_and_chunking#1` y `vector_databases#4`), el modelo `text-embedding-3-small` posee **1536 dimensiones**.\n\n2. **Fórmula y Supuestos para el cálculo de almacenamiento:**\n   - **Fórmula:** $\\text{Espacio total} = \\text{Cantidad de vectores} \\times \\text{Dimensiones por vector} \\times \\text{Bytes por dimensión}$\n   - **Supuestos:**\n     - Cantidad de vectores = $2.000.000$\n     - Dimensiones = ",
+          "decision": null,
+          "timestamp": "2026-10-26T15:28:10.014060+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "La base de conocimiento interna proporcionó las dimensiones y el analista completó todos los cálculos solicitados de almacenamiento. La información es completa.",
+          "decision": "FINISH",
+          "timestamp": "2026-10-26T15:28:29.025608+00:00"
+        },
+        {
+          "node": "synthesizer",
+          "summary": "Según nuestra documentación, el modelo **`text-embedding-3-small`** posee **1536 dimensiones** [embeddings_and_chunking#1, vector_databases#4].\n\nA continuación, te presento el cálculo detallado del es…",
+          "decision": null,
+          "timestamp": "2026-10-26T15:28:48.037772+00:00"
+        }
+      ],
+      "iterations": 3,
+      "pending_approval": null,
+      "latency_ms": 184243
+    }
+  },
+  {
+    "scenario": "3. Investigación externa + RAG",
+    "elapsed_s": 306.6,
+    "response": {
+      "thread_id": "aca16e4fc5804fbb",
+      "status": "completed",
+      "answer": "Aquí tienes la respuesta a tu consulta basada en la base de conocimiento interna y la investigación externa:\n\n### ¿Quiénes desarrollaron el algoritmo BM25 (Okapi BM25) y en qué sistema se usó originalmente?\n\n* **Desarrolladores:** El algoritmo BM25 se basa en modelos probabilísticos de recuperación de información iniciados por **Stephen E. Robertson** y **Karen Spärck Jones** en los años 70. La función final de BM25 y sus variantes (dentro de la familia *Best Matching*) fue desarrollada y refinada a lo largo de los años 80 y 90 por Stephen E. Robertson junto con otros investigadores como Steve Walker, Susan Jones, Micheline Hancock-Beaulieu y Mike Gatford.\n* **Sistema original:** El nombre **\"Okapi\"** proviene del **sistema de recuperación de información Okapi**, un sistema experimental de búsqueda de texto completo desarrollado en la *City University de Londres* a principios de la década de 1980 (liderado por Stephen Walker y su equipo), que fue el lugar donde esta función de ranking se implementó y probó por primera vez de forma masiva (especialmente en las evaluaciones de TREC) [Wikipedia - Okapi BM25].\n\n---\n\n### Rol de BM25 en nuestra búsqueda híbrida\n\nEn nuestra arquitectura de búsqueda híbrida, BM25 cumple un rol fundamental como componente de **recuperación léxica (*sparse retrieval*)**:\n\n* **Fundamento técnico:** Funciona como un algoritmo de ranking basado en TF-IDF con mejoras que incorporan los parámetros $k_1 = 1.5$ (para controlar la saturación de la frecuencia del término) y $b = 0.75$ (para aplicar una penalización por la longitud del documento) [hybrid_search#2, hybrid_search#4].\n* **Fortalezas principales:** \n  * Proporciona **alta precisión en términos exactos** (como frases específicas, nombres propios, siglas, identificadores de errores como *\"HTTPError 429\"* o códigos como *\"SKU-78923\"*) [hybrid_search#0].\n  * Funciona excelente con vocabulario técnico especializado [hybrid_search#1].\n  * Al no requerir embeddings, permite un proceso de indexado más rápido [hybrid_search#1].\n* **Complementariedad:** Se combina con la búsqueda vectorial (*dense retrieval* —ideal para capturar similitud semántica y conceptual, pero débil en coincidencias exactas y términos precisos) para unificar lo mejor de ambos mundos en la búsqueda híbrida [hybrid_search#0, hybrid_search#1].",
+      "sources": [
+        {
+          "ref": "[hybrid_search#2]",
+          "source": "hybrid_search.md",
+          "doc_id": "hybrid_search",
+          "section": "BM25 (Best Match 25)",
+          "score": 0.016288,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## BM25 (Best Match 25)  \nBM25 es un algoritmo de ranking léxico basado en TF-IDF (Term Frequency-Inverse Document Frequency) con mejoras:"
+        },
+        {
+          "ref": "[hybrid_search#1]",
+          "source": "hybrid_search.md",
+          "doc_id": "hybrid_search",
+          "section": "¿Por qué búsqueda híbrida?",
+          "score": 0.016086,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "- Alta precisión en términos exactos\n- No requieren embeddings (más rápido en indexado)\n- Funcionan bien con vocabulario técnico especializado  \nLa **búsqueda híbrida** combina ambos enfoques para obtener lo mejor de cada mundo."
+        },
+        {
+          "ref": "[hybrid_search#0]",
+          "source": "hybrid_search.md",
+          "doc_id": "hybrid_search",
+          "section": "¿Por qué búsqueda híbrida?",
+          "score": 0.015975,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "# Búsqueda Híbrida: BM25 + Vectorial  \n## ¿Por qué búsqueda híbrida?  \nLos sistemas de recuperación puramente vectoriales (dense retrieval) son excelentes para capturar similitud semántica, pero tienen debilidades conocidas:\n- **Términos té…"
+        },
+        {
+          "ref": "[hybrid_search#4]",
+          "source": "hybrid_search.md",
+          "doc_id": "hybrid_search",
+          "section": "BM25 (Best Match 25)",
+          "score": 0.015724,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Parámetros\n- `k1 = 1.5`: controla la saturación de la frecuencia del término\n- `b = 0.75`: penalización por longitud del documento"
+        },
+        {
+          "ref": "[hybrid_search#7]",
+          "source": "hybrid_search.md",
+          "doc_id": "hybrid_search",
+          "section": "Reciprocal Rank Fusion (RRF)",
+          "score": 0.015109,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Ventajas de RRF\n- No requiere normalización de scores\n- Robusto ante distribuciones de scores diferentes\n- Simple de implementar"
+        },
+        {
+          "ref": "[production_apis#3]",
+          "source": "production_apis.md",
+          "doc_id": "production_apis",
+          "section": "Asincronía de punta a punta",
+          "score": 0.015233,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "Para ejecutar varias operaciones independientes en paralelo se usa `asyncio.gather`, por ejemplo la búsqueda BM25 y la búsqueda vectorial de un recuperador híbrido."
+        }
+      ],
+      "agents_used": [
+        "knowledge",
+        "research"
+      ],
+      "steps": [
+        {
+          "node": "supervisor",
+          "summary": "política RAG-first: anclar la respuesta en la base de conocimiento interna",
+          "decision": "knowledge",
+          "timestamp": "2026-10-26T15:28:48.069856+00:00"
+        },
+        {
+          "node": "knowledge",
+          "summary": "6 fragmentos recuperados. Basándome en la base de conocimiento interna, aquí están los hallazgos relevantes:\n\n* **Desarrolladores y sistema original de BM25:** La base de conocimiento interna **no contiene** información sobre quiénes desarrollaron el algoritmo BM25 ni en qué sistema se usó originalmente.\n* **Rol de BM25 en la búsqueda híbrida:** \n  * Funciona como un algoritmo de ranking léxico (*sparse retrieval*) basado en TF-IDF con mejoras (incluyendo los parámetros $k_1 = 1.5$ para saturaci",
+          "decision": null,
+          "timestamp": "2026-10-26T15:30:27.334151+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "La base de conocimiento interna no tiene información sobre quiénes desarrollaron el algoritmo BM25 ni el sistema original donde se usó. Es necesario buscar esta información externamente.",
+          "decision": "research",
+          "timestamp": "2026-10-26T15:31:19.208912+00:00"
+        },
+        {
+          "node": "research",
+          "summary": "Resumen estructurado de la investigación sobre el algoritmo BM25 (Okapi BM25):\n\n1. **Desarrolladores y base teórica:**\n   - El algoritmo BM25 se basa en los modelos probabilísticos de recuperación de información, específicamente en el modelo *Binary Independent Retrieval* (BIR) desarrollado por **Stephen E. Robertson** y **Karen Spärck Jones** durante los años 70. \n   - A lo largo de los años 80 y 90, el propio Stephen E. Robertson, junto con otros investigadores como Steve Walker, Susan Jones, ",
+          "decision": null,
+          "timestamp": "2026-10-26T15:32:51.491179+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "Ya se cuenta con la información sobre los desarrolladores y el sistema original de BM25 (aportada por research) y sobre su rol en la búsqueda híbrida (aportada por knowledge). No se requieren cálculos ni más consultas.",
+          "decision": "FINISH",
+          "timestamp": "2026-10-26T15:33:34.896625+00:00"
+        },
+        {
+          "node": "synthesizer",
+          "summary": "Aquí tienes la respuesta a tu consulta basada en la base de conocimiento interna y la investigación externa:\n\n### ¿Quiénes desarrollaron el algoritmo BM25 (Okapi BM25) y en qué sistema se usó original…",
+          "decision": null,
+          "timestamp": "2026-10-26T15:33:54.631048+00:00"
+        }
+      ],
+      "iterations": 3,
+      "pending_approval": null,
+      "latency_ms": 306622
+    }
+  },
+  {
+    "scenario": "4. Memoria multi-turno",
+    "elapsed_s": 182.8,
+    "response": {
+      "thread_id": "calc-1793028343",
+      "status": "completed",
+      "answer": "Si usaras un modelo de **768 dimensiones** manteniendo el mismo tipo de dato (`float32`) y la misma cantidad de vectores (2 millones), el porcentaje de almacenamiento que ahorrarías sería exactamente del **50%** [embeddings_and_chunking#1, vector_databases#4].\n\n### Supuestos del cálculo\n* **Cantidad de vectores:** 2.000.000\n* **Dimensiones originales (`text-embedding-3-small`):** 1536 dimensiones [embeddings_and_chunking#1, vector_databases#4]\n* **Dimensiones nuevas:** 768 dimensiones\n* **Tamaño por dimensión (`float32`):** 4 bytes\n\n---\n\n### Análisis cuantitativo y cálculos\n\n#### 1. Porcentaje de ahorro\nComo la cantidad de vectores y el tamaño en bytes por dimensión (`float32`) se mantienen constantes, el ahorro se calcula directamente a partir de la reducción en el número de dimensiones:\n\n$$\\text{Porcentaje de ahorro} = \\left(1 - \\frac{\\text{Dimensiones nuevas}}{\\text{Dimensiones originales}}\\right) \\times 100$$\n\n$$\\text{Porcentaje de ahorro} = \\left(1 - \\frac{768}{1536}\\right) \\times 100 = \\mathbf{50\\%}$$\n\n#### 2. Comparativa de espacio de almacenamiento (para 2 millones de vectores)\n* **Espacio original (1536 dimensiones):** 12,288 GB (12.288.000.000 bytes)\n* **Espacio con el modelo nuevo (768 dimensiones):** 6,144 GB (6.144.000.000 bytes)\n\n### Conclusión\nReducir las dimensiones a la mitad disminuye proporcionalmente el consumo de memoria a la mitad, liberando **6,144 GB** de espacio para tus 2 millones de vectores.",
+      "sources": [
+        {
+          "ref": "[embeddings_and_chunking#1]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "Modelos de embedding populares",
+          "score": 0.016393,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Modelos de embedding populares  \n### OpenAI\n- **text-embedding-3-small**: 1536 dimensiones, excelente relación calidad/costo\n- **text-embedding-3-large**: 3072 dimensiones, mayor precisión\n- **text-embedding-ada-002**: 1536 dimensiones (…"
+        },
+        {
+          "ref": "[vector_databases#4]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Conceptos clave en Pinecone",
+          "score": 0.015682,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Conceptos clave en Pinecone  \n### Índice (Index)\nUn índice es la unidad principal de almacenamiento en Pinecone. Al crear un índice se define:\n- **Dimensión**: El número de dimensiones del vector (ej. 1536 para text-embedding-3-small de …"
+        },
+        {
+          "ref": "[embeddings_and_chunking#2]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "Modelos de embedding populares",
+          "score": 0.015238,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Open Source\n- **sentence-transformers/all-MiniLM-L6-v2**: 384 dims, muy rápido, ideal para CPU\n- **BAAI/bge-large-en-v1.5**: 1024 dims, alta calidad\n- **intfloat/multilingual-e5-large**: Soporte multilingüe"
+        },
+        {
+          "ref": "[embeddings_and_chunking#5]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "Estrategias de chunking",
+          "score": 0.014542,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Recursive Character Text Splitter\nIntenta dividir por separadores jerárquicos: primero párrafos (`\\n\\n`), luego saltos de línea (`\\n`), luego oraciones, finalmente por caracteres. Es la estrategia más común y recomendada para texto gene…"
+        },
+        {
+          "ref": "[vector_databases#8]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Algoritmos ANN",
+          "score": 0.014493,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Algoritmos ANN  \nLas bases de datos vectoriales utilizan algoritmos de vecinos más cercanos aproximados para escalar a millones de vectores:\n- **HNSW** (Hierarchical Navigable Small World): Alta velocidad de consulta\n- **IVF** (Inverted …"
+        }
+      ],
+      "agents_used": [
+        "knowledge",
+        "analyst"
+      ],
+      "steps": [
+        {
+          "node": "supervisor",
+          "summary": "política RAG-first: anclar la respuesta en la base de conocimiento interna",
+          "decision": "knowledge",
+          "timestamp": "2026-10-26T15:33:54.710654+00:00"
+        },
+        {
+          "node": "knowledge",
+          "summary": "5 fragmentos recuperados. - El modelo `text-embedding-3-small` original tiene **1536 dimensiones** [embeddings_and_chunking#1, vector_databases#4].\n- Si se usara un modelo de **768 dimensiones** manteniendo el mismo tipo de dato (`float32`), el almacenamiento se reduciría exactamente a la mitad (un **50% de ahorro**). \n- Esto es debido a que la cantidad de dimensiones se reduce de 1536 a 768 (un 50%), manteniendo constante la cantidad de vectores y el tamaño en bytes por dimensión (`float32`).",
+          "decision": null,
+          "timestamp": "2026-10-26T15:34:41.130419+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "cobertura: la consulta pide un cálculo explícito",
+          "decision": "analyst",
+          "timestamp": "2026-10-26T15:35:03.329398+00:00"
+        },
+        {
+          "node": "analyst",
+          "summary": "$$\\text{Espacio total} = 6.144.000.000 \\text{ bytes}$$\n\nEn Gigabytes (sistema internacional / decimal):\n$$\\frac{6.144.000.000}{10^9} = 6,144 \\text{ GB}$$\n\n#### Fórmula y Cálculo del porcentaje de ahorro\nEl porcentaje de ahorro de almacenamiento se calcula comparando las dimensiones (o directamente el espacio total ocupado, ya que el tipo de dato y la cantidad de vectores son constantes):\n\n$$\\text{Porcentaje de ahorro} = \\left(1 - \\frac{\\text{Dimensiones nuevas}}{\\text{Dimensiones originales}}\\ri",
+          "decision": null,
+          "timestamp": "2026-10-26T15:36:11.025963+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "Ya se consultó la base de conocimiento y el analista calculó tanto el espacio absoluto como el porcentaje de ahorro. Toda la información necesaria para responder está disponible.",
+          "decision": "FINISH",
+          "timestamp": "2026-10-26T15:36:30.591088+00:00"
+        },
+        {
+          "node": "synthesizer",
+          "summary": "Si usaras un modelo de **768 dimensiones** manteniendo el mismo tipo de dato (`float32`) y la misma cantidad de vectores (2 millones), el porcentaje de almacenamiento que ahorrarías sería exactamente …",
+          "decision": null,
+          "timestamp": "2026-10-26T15:36:57.522908+00:00"
+        }
+      ],
+      "iterations": 3,
+      "pending_approval": null,
+      "latency_ms": 182835
+    },
+    "thread_history": {
+      "thread_id": "calc-1793028343",
+      "status": "completed",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Según nuestra documentación, ¿cuántas dimensiones tiene el modelo text-embedding-3-small? Calculá cuántos GB ocupan 2 millones de esos vectores almacenados en float32 (4 bytes por dimensión)."
+        },
+        {
+          "role": "assistant",
+          "content": "Según nuestra documentación, el modelo **`text-embedding-3-small`** posee **1536 dimensiones** [embeddings_and_chunking#1, vector_databases#4].\n\nA continuación, te presento el cálculo detallado del espacio de almacenamiento necesario para 2 millones de esos vectores en formato `float32` (4 bytes por dimensión):\n\n### Supuestos del cálculo\n* **Cantidad de vectores:** 2.000.000\n* **Dimensiones por vector:** 1536\n* **Tamaño por dimensión (`float32`):** 4 bytes\n\n### Fórmula\n$$\\text{Espacio total} = \\text{Cantidad de vectores} \\times \\text{Dimensiones} \\times \\text{Bytes}$$\n$$\\text{Espacio total} = 2.000.000 \\times 1536 \\times 4 = 12.288.000.000 \\text{ bytes}$$\n\n### Números finales según la unidad de medida\n* **En bytes:** **12.288.000.000 bytes**\n* **En Gigabytes (Decimal / Sistema Internacional: $1 \\text{ GB} = 10^9 \\text{ bytes}$):** **12,29 GB** \n* **En Gibibytes (Binario: $1 \\text{ GiB} = 1024^3 \\text{ bytes} \\approx 1.073.741.824 \\text{ bytes}$):** **11,44 GiB**"
+        },
+        {
+          "role": "user",
+          "content": "¿Y si usara un modelo de 768 dimensiones? ¿Qué porcentaje de almacenamiento ahorraría?"
+        },
+        {
+          "role": "assistant",
+          "content": "Si usaras un modelo de **768 dimensiones** manteniendo el mismo tipo de dato (`float32`) y la misma cantidad de vectores (2 millones), el porcentaje de almacenamiento que ahorrarías sería exactamente del **50%** [embeddings_and_chunking#1, vector_databases#4].\n\n### Supuestos del cálculo\n* **Cantidad de vectores:** 2.000.000\n* **Dimensiones originales (`text-embedding-3-small`):** 1536 dimensiones [embeddings_and_chunking#1, vector_databases#4]\n* **Dimensiones nuevas:** 768 dimensiones\n* **Tamaño por dimensión (`float32`):** 4 bytes\n\n---\n\n### Análisis cuantitativo y cálculos\n\n#### 1. Porcentaje de ahorro\nComo la cantidad de vectores y el tamaño en bytes por dimensión (`float32`) se mantienen constantes, el ahorro se calcula directamente a partir de la reducción en el número de dimensiones:\n\n$$\\text{Porcentaje de ahorro} = \\left(1 - \\frac{\\text{Dimensiones nuevas}}{\\text{Dimensiones originales}}\\right) \\times 100$$\n\n$$\\text{Porcentaje de ahorro} = \\left(1 - \\frac{768}{1536}\\right) \\times 100 = \\mathbf{50\\%}$$\n\n#### 2. Comparativa de espacio de almacenamiento (para 2 millones de vectores)\n* **Espacio original (1536 dimensiones):** 12,288 GB (12.288.000.000 bytes)\n* **Espacio con el modelo nuevo (768 dimensiones):** 6,144 GB (6.144.000.000 bytes)\n\n### Conclusión\nReducir las dimensiones a la mitad disminuye proporcionalmente el consumo de memoria a la mitad, liberando **6,144 GB** de espacio para tus 2 millones de vectores."
+        }
+      ],
+      "last_steps": [
+        {
+          "node": "supervisor",
+          "summary": "política RAG-first: anclar la respuesta en la base de conocimiento interna",
+          "decision": "knowledge",
+          "timestamp": "2026-10-26T15:33:54.710654+00:00"
+        },
+        {
+          "node": "knowledge",
+          "summary": "5 fragmentos recuperados. - El modelo `text-embedding-3-small` original tiene **1536 dimensiones** [embeddings_and_chunking#1, vector_databases#4].\n- Si se usara un modelo de **768 dimensiones** manteniendo el mismo tipo de dato (`float32`), el almacenamiento se reduciría exactamente a la mitad (un **50% de ahorro**). \n- Esto es debido a que la cantidad de dimensiones se reduce de 1536 a 768 (un 50%), manteniendo constante la cantidad de vectores y el tamaño en bytes por dimensión (`float32`).",
+          "decision": null,
+          "timestamp": "2026-10-26T15:34:41.130419+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "cobertura: la consulta pide un cálculo explícito",
+          "decision": "analyst",
+          "timestamp": "2026-10-26T15:35:03.329398+00:00"
+        },
+        {
+          "node": "analyst",
+          "summary": "$$\\text{Espacio total} = 6.144.000.000 \\text{ bytes}$$\n\nEn Gigabytes (sistema internacional / decimal):\n$$\\frac{6.144.000.000}{10^9} = 6,144 \\text{ GB}$$\n\n#### Fórmula y Cálculo del porcentaje de ahorro\nEl porcentaje de ahorro de almacenamiento se calcula comparando las dimensiones (o directamente el espacio total ocupado, ya que el tipo de dato y la cantidad de vectores son constantes):\n\n$$\\text{Porcentaje de ahorro} = \\left(1 - \\frac{\\text{Dimensiones nuevas}}{\\text{Dimensiones originales}}\\ri",
+          "decision": null,
+          "timestamp": "2026-10-26T15:36:11.025963+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "Ya se consultó la base de conocimiento y el analista calculó tanto el espacio absoluto como el porcentaje de ahorro. Toda la información necesaria para responder está disponible.",
+          "decision": "FINISH",
+          "timestamp": "2026-10-26T15:36:30.591088+00:00"
+        },
+        {
+          "node": "synthesizer",
+          "summary": "Si usaras un modelo de **768 dimensiones** manteniendo el mismo tipo de dato (`float32`) y la misma cantidad de vectores (2 millones), el porcentaje de almacenamiento que ahorrarías sería exactamente …",
+          "decision": null,
+          "timestamp": "2026-10-26T15:36:57.522908+00:00"
+        }
+      ],
+      "pending_approval": null,
+      "checkpoint_id": "1f1d1531-41e7-6c9f-800e-efa8f7843196"
+    }
+  },
+  {
+    "scenario": "5. HITL aprobado",
+    "elapsed_s": 246.8,
+    "response": {
+      "thread_id": "be2c89b887d64e5c",
+      "status": "completed",
+      "answer": "Aquí tienes el plan paso a paso y la estimación cuantitativa solicitada para borrar el índice de producción y reingestar tus documentos con chunks de 400 tokens.\n\n---\n\n### 📊 Estimación Cuantitativa de Chunks\n\nPara calcular la cantidad de fragmentos (*chunks*), se han considerado los siguientes **supuestos**:\n* **Volumen total:** 1.500 páginas con un promedio de 500 tokens cada una ($1.500 \\times 500 = 750.000$ tokens en total).\n* **Tamaño del chunk:** 400 tokens fijos.\n\n#### Resultados del cálculo:\n1. **Sin solapamiento (*overlap* = 0%):**\n   * **Cálculo:** $\\frac{750.000 \\text{ tokens}}{400 \\text{ tokens/chunk}} =$ **1.875 chunks**.\n2. **Con un solapamiento estándar del 10% al 15%** (recomendado para mantener contexto entre fragmentos consecutivos) [embeddings_and_chunking#4]:\n   * **Estimación ajustada:** Aproximadamente entre **2.063 y 2.156 chunks**.\n\n---\n\n### 📋 Plan Paso a Paso para el Borrado y Reingesta\n\nDado que la operación cuenta con **aprobación humana** (con la condición de **ejecutarse fuera del horario pico**), seguiremos este flujo basado en el pipeline de ingesta estándar [rag_fundamentals#2] y la gestión de bases vectoriales [vector_databases#4]:\n\n#### Paso 1: Planificación y Ventana de Mantenimiento\n* Programar la ejecución en el horario de menor tráfico (fuera de pico) para mitigar impactos en los usuarios o aplicaciones que consuman el índice de producción.\n\n#### Paso 2: Eliminación del Índice Vectorial Actual en Pinecone\n* Conectarse a la consola de Pinecone o utilizar su API/SDK para eliminar el índice de producción obsoleto. \n* *Nota:* La base de conocimiento no detalla un script específico de borrado de índice en Pinecone, por lo que se debe utilizar el método estándar de la plataforma (`pc.delete_index(\"nombre-de-indice\")` o desde el dashboard).\n\n#### Paso 3: Reconfiguración y Recreación del Índice (si aplica)\n* Crear un nuevo índice en Pinecone configurando los parámetros clave [vector_databases#4]:\n  * **Dimensión:** Acorde al modelo de *embeddings* que utilices (ej. 1536 para OpenAI `text-embedding-3-small`) [vector_databases#4].\n  * **Métrica:** Función de distancia requerida (ej. *cosine* o *euclidean*) [vector_databases#4].\n  * **Tipo:** Serverless o Pod-based [vector_databases#4].\n\n#### Paso 4: Actualización del Pipeline de Ingesta\n* Configurar el script de división de documentos (*chunking*) para establecer el tamaño fijo en **400 tokens** [embeddings_and_chunking#4].\n\n#### Paso 5: Ejecución de la Ingesta de Documentos\n* **Carga:** Iniciar el proceso cargando las 1.500 páginas desde sus fuentes originales [rag_fundamentals#2].\n* **Chunking:** Dividir el contenido aplicando el nuevo límite de 400 tokens [rag_fundamentals#2].\n* **Embeddings:** Convertir los fragmentos resultantes (estimados entre 1.875 y ~2.156) en vectores de *embeddings* [rag_fundamentals#2].\n* **Almacenamiento:** Guardar los vectores junto con sus metadatos correspondientes en el nuevo índice de Pinecone [rag_fundamentals#2].\n\n#### Paso 6: Pruebas de Verificación\n* Realizar consultas de prueba (*retrieval test*) para validar que la búsqueda semántica responde correctamente y que el índice operativo procesa las peticiones sin latencias anómalas.",
+      "sources": [
+        {
+          "ref": "[embeddings_and_chunking#4]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "Estrategias de chunking",
+          "score": 0.015897,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Fixed-size chunking\nDivide el texto en fragmentos de tamaño fijo (por número de tokens o caracteres), con un solapamiento (overlap) entre fragmentos consecutivos.  \n**Ventajas**: Simple, predecible, fácil de implementar.\n**Desventajas**…"
+        },
+        {
+          "ref": "[embeddings_and_chunking#6]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "Estrategias de chunking",
+          "score": 0.016185,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Semantic Chunking\nAgrupa oraciones semanticamente relacionadas usando embeddings. Más costoso computacionalmente pero produce chunks más coherentes."
+        },
+        {
+          "ref": "[rag_fundamentals#2]",
+          "source": "rag_fundamentals.md",
+          "doc_id": "rag_fundamentals",
+          "section": "Componentes principales",
+          "score": 0.016081,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### 2. Pipeline de ingesta\nEl pipeline de ingesta es el proceso mediante el cual los documentos son:\n- Cargados desde sus fuentes originales\n- Divididos en fragmentos (chunks) de tamaño apropiado\n- Convertidos en vectores de embeddings\n- Al…"
+        },
+        {
+          "ref": "[embeddings_and_chunking#9]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "El problema del \"lost in the middle\"",
+          "score": 0.015341,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## El problema del \"lost in the middle\"  \nInvestigaciones han demostrado que los LLMs tienden a prestar menos atención a la información ubicada en el medio de un contexto largo. Estrategias para mitigarlo:\n- **Reranking**: Reordenar los chu…"
+        },
+        {
+          "ref": "[hybrid_search#5]",
+          "source": "hybrid_search.md",
+          "doc_id": "hybrid_search",
+          "section": "EnsembleRetriever en LangChain",
+          "score": 0.009677,
+          "retrievers": [
+            "vector"
+          ],
+          "preview": "## EnsembleRetriever en LangChain  \nLangChain provee `EnsembleRetriever` para combinar múltiples retrievers mediante fusión de rankings con Reciprocal Rank Fusion (RRF):  \n```python\nfrom langchain.retrievers import EnsembleRetriever\nfrom la…"
+        },
+        {
+          "ref": "[vector_databases#1]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Pinecone",
+          "score": 0.015897,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Pinecone  \nPinecone es una base de datos vectorial administrada en la nube (DBaaS). Ofrece dos modalidades de despliegue:"
+        },
+        {
+          "ref": "[vector_databases#2]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Pinecone",
+          "score": 0.015724,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Pinecone Serverless\n- Sin gestión de infraestructura\n- Escalado automático según la demanda\n- Pago por uso (basado en lecturas/escrituras y almacenamiento)\n- Ideal para prototipos y producción a cualquier escala\n- Soporta múltiples índi…"
+        },
+        {
+          "ref": "[vector_databases#4]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Conceptos clave en Pinecone",
+          "score": 0.015253,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Conceptos clave en Pinecone  \n### Índice (Index)\nUn índice es la unidad principal de almacenamiento en Pinecone. Al crear un índice se define:\n- **Dimensión**: El número de dimensiones del vector (ej. 1536 para text-embedding-3-small de …"
+        },
+        {
+          "ref": "[embeddings_and_chunking#3]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "Estrategias de chunking",
+          "score": 0.015827,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Estrategias de chunking  \nEl chunking (fragmentación) es uno de los pasos más críticos en un pipeline RAG. Una estrategia inadecuada puede degradar significativamente la calidad de la recuperación."
+        },
+        {
+          "ref": "[embeddings_and_chunking#0]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "¿Qué son los embeddings?",
+          "score": 0.015475,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "# Embeddings y Estrategias de Chunking  \n## ¿Qué son los embeddings?  \nLos embeddings son representaciones numéricas de texto en un espacio vectorial de alta dimensionalidad. Textos con significados similares quedan ubicados cerca en este e…"
+        }
+      ],
+      "agents_used": [
+        "knowledge",
+        "analyst"
+      ],
+      "steps": [
+        {
+          "node": "supervisor",
+          "summary": "política RAG-first: anclar la respuesta en la base de conocimiento interna",
+          "decision": "knowledge",
+          "timestamp": "2026-10-26T15:36:57.554990+00:00"
+        },
+        {
+          "node": "knowledge",
+          "summary": "10 fragmentos recuperados. En relación con la solicitud del usuario, la base de conocimiento interna no contiene una fórmula exacta o específica de cálculo matemático de solapamiento (*overlap*) para estimar el número de chunks a partir de un tamaño de página y un tamaño de chunk fijos, ni detalla un script específico de borrado de índice en Pinecone. Sin embargo, contiene la información fundamental sobre los componentes de la arquitectura y el pipeline de ingesta [rag_fundamentals#2, vector_dat",
+          "decision": null,
+          "timestamp": "2026-10-26T15:38:43.023504+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "La base de conocimiento interna ya aportó las directrices del pipeline de ingesta y chunking, pero se necesita un cálculo cuantitativo exacto para estimar cuántos chunks se generarán a partir de 1.500 páginas de 500 tokens cada una utilizando un tamaño de chunk de 400 tokens.",
+          "decision": "analyst",
+          "timestamp": "2026-10-26T15:39:03.787524+00:00"
+        },
+        {
+          "node": "human_approval",
+          "summary": "aprobado. Aprobado: ejecutar fuera del horario pico.",
+          "decision": "aprobado",
+          "timestamp": "2026-10-26T15:39:03.817657+00:00"
+        },
+        {
+          "node": "analyst",
+          "summary": "Para cumplir con la instrucción del Supervisor y los requerimientos del análisis, presento el desglose cuantitativo y los supuestos técnicos utilizados:\n\n### 1. Supuestos Adoptados\n* **Tamaño total de texto:** 1.500 páginas $\\times$ 500 tokens/página = $750.000$ tokens en total.\n* **Tamaño del chunk:** 400 tokens fijos (según el requerimiento del usuario).\n* **Solapamiento (*Overlap*):** Dado que la base de conocimiento no especifica un porcentaje obligatorio de solapamiento para este caso, y pa",
+          "decision": null,
+          "timestamp": "2026-10-26T15:39:43.789137+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "El agente 'knowledge' ya proporcionó el contexto técnico del pipeline de ingesta y 'analyst' completó el cálculo cuantitativo requerido para los chunks. Toda la información necesaria para responder al usuario está reunida.",
+          "decision": "FINISH",
+          "timestamp": "2026-10-26T15:40:04.622067+00:00"
+        },
+        {
+          "node": "synthesizer",
+          "summary": "Aquí tienes el plan paso a paso y la estimación cuantitativa solicitada para borrar el índice de producción y reingestar tus documentos con chunks de 400 tokens.\n\n---\n\n### 📊 Estimación Cuantitativa de…",
+          "decision": null,
+          "timestamp": "2026-10-26T15:41:04.307702+00:00"
+        }
+      ],
+      "iterations": 3,
+      "pending_approval": null,
+      "latency_ms": 120563
+    },
+    "paused_response": {
+      "thread_id": "be2c89b887d64e5c",
+      "status": "awaiting_approval",
+      "answer": null,
+      "sources": [
+        {
+          "ref": "[embeddings_and_chunking#4]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "Estrategias de chunking",
+          "score": 0.015897,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Fixed-size chunking\nDivide el texto en fragmentos de tamaño fijo (por número de tokens o caracteres), con un solapamiento (overlap) entre fragmentos consecutivos.  \n**Ventajas**: Simple, predecible, fácil de implementar.\n**Desventajas**…"
+        },
+        {
+          "ref": "[embeddings_and_chunking#6]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "Estrategias de chunking",
+          "score": 0.016185,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Semantic Chunking\nAgrupa oraciones semanticamente relacionadas usando embeddings. Más costoso computacionalmente pero produce chunks más coherentes."
+        },
+        {
+          "ref": "[rag_fundamentals#2]",
+          "source": "rag_fundamentals.md",
+          "doc_id": "rag_fundamentals",
+          "section": "Componentes principales",
+          "score": 0.016081,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### 2. Pipeline de ingesta\nEl pipeline de ingesta es el proceso mediante el cual los documentos son:\n- Cargados desde sus fuentes originales\n- Divididos en fragmentos (chunks) de tamaño apropiado\n- Convertidos en vectores de embeddings\n- Al…"
+        },
+        {
+          "ref": "[embeddings_and_chunking#9]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "El problema del \"lost in the middle\"",
+          "score": 0.015341,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## El problema del \"lost in the middle\"  \nInvestigaciones han demostrado que los LLMs tienden a prestar menos atención a la información ubicada en el medio de un contexto largo. Estrategias para mitigarlo:\n- **Reranking**: Reordenar los chu…"
+        },
+        {
+          "ref": "[hybrid_search#5]",
+          "source": "hybrid_search.md",
+          "doc_id": "hybrid_search",
+          "section": "EnsembleRetriever en LangChain",
+          "score": 0.009677,
+          "retrievers": [
+            "vector"
+          ],
+          "preview": "## EnsembleRetriever en LangChain  \nLangChain provee `EnsembleRetriever` para combinar múltiples retrievers mediante fusión de rankings con Reciprocal Rank Fusion (RRF):  \n```python\nfrom langchain.retrievers import EnsembleRetriever\nfrom la…"
+        },
+        {
+          "ref": "[vector_databases#1]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Pinecone",
+          "score": 0.015897,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Pinecone  \nPinecone es una base de datos vectorial administrada en la nube (DBaaS). Ofrece dos modalidades de despliegue:"
+        },
+        {
+          "ref": "[vector_databases#2]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Pinecone",
+          "score": 0.015724,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Pinecone Serverless\n- Sin gestión de infraestructura\n- Escalado automático según la demanda\n- Pago por uso (basado en lecturas/escrituras y almacenamiento)\n- Ideal para prototipos y producción a cualquier escala\n- Soporta múltiples índi…"
+        },
+        {
+          "ref": "[vector_databases#4]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Conceptos clave en Pinecone",
+          "score": 0.015253,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Conceptos clave en Pinecone  \n### Índice (Index)\nUn índice es la unidad principal de almacenamiento en Pinecone. Al crear un índice se define:\n- **Dimensión**: El número de dimensiones del vector (ej. 1536 para text-embedding-3-small de …"
+        },
+        {
+          "ref": "[embeddings_and_chunking#3]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "Estrategias de chunking",
+          "score": 0.015827,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Estrategias de chunking  \nEl chunking (fragmentación) es uno de los pasos más críticos en un pipeline RAG. Una estrategia inadecuada puede degradar significativamente la calidad de la recuperación."
+        },
+        {
+          "ref": "[embeddings_and_chunking#0]",
+          "source": "embeddings_and_chunking.md",
+          "doc_id": "embeddings_and_chunking",
+          "section": "¿Qué son los embeddings?",
+          "score": 0.015475,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "# Embeddings y Estrategias de Chunking  \n## ¿Qué son los embeddings?  \nLos embeddings son representaciones numéricas de texto en un espacio vectorial de alta dimensionalidad. Textos con significados similares quedan ubicados cerca en este e…"
+        }
+      ],
+      "agents_used": [
+        "knowledge"
+      ],
+      "steps": [
+        {
+          "node": "supervisor",
+          "summary": "política RAG-first: anclar la respuesta en la base de conocimiento interna",
+          "decision": "knowledge",
+          "timestamp": "2026-10-26T15:36:57.554990+00:00"
+        },
+        {
+          "node": "knowledge",
+          "summary": "10 fragmentos recuperados. En relación con la solicitud del usuario, la base de conocimiento interna no contiene una fórmula exacta o específica de cálculo matemático de solapamiento (*overlap*) para estimar el número de chunks a partir de un tamaño de página y un tamaño de chunk fijos, ni detalla un script específico de borrado de índice en Pinecone. Sin embargo, contiene la información fundamental sobre los componentes de la arquitectura y el pipeline de ingesta [rag_fundamentals#2, vector_dat",
+          "decision": null,
+          "timestamp": "2026-10-26T15:38:43.023504+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "La base de conocimiento interna ya aportó las directrices del pipeline de ingesta y chunking, pero se necesita un cálculo cuantitativo exacto para estimar cuántos chunks se generarán a partir de 1.500 páginas de 500 tokens cada una utilizando un tamaño de chunk de 400 tokens.",
+          "decision": "analyst",
+          "timestamp": "2026-10-26T15:39:03.787524+00:00"
+        }
+      ],
+      "iterations": 2,
+      "pending_approval": {
+        "reason": "La consulta implica una operación con efectos colaterales (borrar, desplegar, ejecutar, pagar…).",
+        "query": "Necesito borrar el índice vectorial de producción y reingestar todos los documentos con chunks de 400 tokens. Dame el plan paso a paso y estimá cuántos chunks se generarían para 1.500 páginas de 500 tokens cada una.",
+        "planned_action": "analyst",
+        "context_preview": "En relación con la solicitud del usuario, la base de conocimiento interna no contiene una fórmula exacta o específica de cálculo matemático de solapamiento (*overlap*) para estimar el número de chunks a partir de un tamaño de página y un tamaño de chunk fijos, ni detalla un script específico de borrado de índice en Pinecone. Sin embargo, contiene la información fundamental sobre los componentes de la arquitectura y el pipeline de ingesta [rag_fundamentals#2, vector_databases#4].\n\nA continuación, presento un resumen estructurado de los hallazgos disponibles en la base de conocimiento respecto a…",
+        "sources": [
+          "[embeddings_and_chunking#4]",
+          "[embeddings_and_chunking#6]",
+          "[rag_fundamentals#2]",
+          "[embeddings_and_chunking#9]",
+          "[hybrid_search#5]",
+          "[vector_databases#1]",
+          "[vector_databases#2]",
+          "[vector_databases#4]",
+          "[embeddings_and_chunking#3]",
+          "[embeddings_and_chunking#0]"
+        ]
+      },
+      "latency_ms": 126250
+    }
+  },
+  {
+    "scenario": "6. HITL rechazado (tarea en background)",
+    "elapsed_s": 207.2,
+    "response": {
+      "thread_id": "1ba3713044ee42a4",
+      "status": "rejected",
+      "answer": "La solicitud fue marcada como crítica y un operador humano **rechazó** su ejecución, por lo que no se generó el plan ni el análisis solicitado.\n\nComentario del operador: Rechazado: no se borra producción sin ventana de mantenimiento.",
+      "sources": [
+        {
+          "ref": "[vector_databases#5]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Conceptos clave en Pinecone",
+          "score": 0.016393,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Namespace\nLos namespaces permiten particionar los datos dentro de un mismo índice. Esto es útil para:\n- Separar datos de diferentes clientes (multi-tenancy)\n- Organizar documentos por tipo o categoría\n- Ejecutar búsquedas aisladas sin i…"
+        },
+        {
+          "ref": "[vector_databases#4]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Conceptos clave en Pinecone",
+          "score": 0.016027,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Conceptos clave en Pinecone  \n### Índice (Index)\nUn índice es la unidad principal de almacenamiento en Pinecone. Al crear un índice se define:\n- **Dimensión**: El número de dimensiones del vector (ej. 1536 para text-embedding-3-small de …"
+        },
+        {
+          "ref": "[langchain_overview#7]",
+          "source": "langchain_overview.md",
+          "doc_id": "langchain_overview",
+          "section": "Integración con Pinecone",
+          "score": 0.015975,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Integración con Pinecone  \n```python\nfrom langchain_pinecone import PineconeVectorStore\nfrom langchain_openai import OpenAIEmbeddings\n\nembeddings = OpenAIEmbeddings(model=\"text-embedding-3-small\")\nvectorstore = PineconeVectorStore.from_e…"
+        },
+        {
+          "ref": "[vector_databases#2]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Pinecone",
+          "score": 0.015481,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "### Pinecone Serverless\n- Sin gestión de infraestructura\n- Escalado automático según la demanda\n- Pago por uso (basado en lecturas/escrituras y almacenamiento)\n- Ideal para prototipos y producción a cualquier escala\n- Soporta múltiples índi…"
+        },
+        {
+          "ref": "[vector_databases#1]",
+          "source": "vector_databases.md",
+          "doc_id": "vector_databases",
+          "section": "Pinecone",
+          "score": 0.015436,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Pinecone  \nPinecone es una base de datos vectorial administrada en la nube (DBaaS). Ofrece dos modalidades de despliegue:"
+        },
+        {
+          "ref": "[production_apis#0]",
+          "source": "production_apis.md",
+          "doc_id": "production_apis",
+          "section": "Asincronía de punta a punta",
+          "score": 0.015724,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "# APIs de IA en producción: FastAPI asíncrono, Pydantic y Redis  \n## Asincronía de punta a punta"
+        },
+        {
+          "ref": "[production_apis#9]",
+          "source": "production_apis.md",
+          "doc_id": "production_apis",
+          "section": "Despliegue local reproducible",
+          "score": 0.015158,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Despliegue local reproducible  \nDocker Compose permite levantar la API, Redis y Phoenix con un solo comando (`docker compose up --build`). Conviene usar healthchecks, volúmenes para persistir datos entre reinicios, versiones de imágenes …"
+        },
+        {
+          "ref": "[production_apis#7]",
+          "source": "production_apis.md",
+          "doc_id": "production_apis",
+          "section": "Redis en arquitecturas de IA",
+          "score": 0.014496,
+          "retrievers": [
+            "bm25",
+            "vector"
+          ],
+          "preview": "## Redis en arquitecturas de IA  \nRedis cumple varios roles: almacén de estado de tareas en background (con TTL), checkpointer de LangGraph para persistir conversaciones, caché semántica de respuestas, rate limiting y base de datos vectoria…"
+        }
+      ],
+      "agents_used": [
+        "knowledge",
+        "research"
+      ],
+      "steps": [
+        {
+          "node": "supervisor",
+          "summary": "política RAG-first: anclar la respuesta en la base de conocimiento interna",
+          "decision": "knowledge",
+          "timestamp": "2026-10-26T15:41:04.387567+00:00"
+        },
+        {
+          "node": "knowledge",
+          "summary": "8 fragmentos recuperados. Resumen estructurado de los hallazgos en la base de conocimiento interna:\n\n- **Concepto de Namespace en Pinecone**: Los namespaces permiten particionar los datos dentro de un mismo índice para separar información de clientes, organizar documentos por tipo o categoría, y realizar búsquedas aisladas [vector_databases#5].\n- **Integración con LangChain**: En las configuraciones previas con `langchain_pinecone`, la inicialización del vector store especificaba explícitamente ",
+          "decision": null,
+          "timestamp": "2026-10-26T15:42:05.523629+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "La base de conocimiento interna no tiene procedimientos específicos ni guías de migración para eliminar un namespace en producción en Pinecone, por lo que se requiere investigación externa.",
+          "decision": "research",
+          "timestamp": "2026-10-26T15:42:27.154483+00:00"
+        },
+        {
+          "node": "research",
+          "summary": "Como el entorno actual tiene la herramienta de búsqueda web deshabilitada y Wikipedia no contiene guías operativas detalladas de Pinecone sobre comandos específicos de borrado de namespaces, presento el resumen de los conceptos técnicos clave y los métodos estándar basados en el funcionamiento de la API de Pinecone para la gestión y eliminación de namespaces en producción:\n\n### 1. Concepto de Namespace en Pinecone\n* **Definición:** Los namespaces en Pinecone permiten particionar los vectores den",
+          "decision": null,
+          "timestamp": "2026-10-26T15:44:11.293008+00:00"
+        },
+        {
+          "node": "supervisor",
+          "summary": "Ya se cuenta con la información conceptual de Pinecone sobre namespaces y la estrategia general de eliminación a través de la API, y dado que no se requieren cálculos cuantitativos ni hay más agentes especializados necesarios, se pasa al Synthesizer para redactar la respuesta final.",
+          "decision": "FINISH",
+          "timestamp": "2026-10-26T15:44:28.428909+00:00"
+        },
+        {
+          "node": "human_approval",
+          "summary": "rechazado. Rechazado: no se borra producción sin ventana de mantenimiento.",
+          "decision": "rechazado",
+          "timestamp": "2026-10-26T15:44:29.536205+00:00"
+        },
+        {
+          "node": "synthesizer",
+          "summary": "La solicitud fue marcada como crítica y un operador humano **rechazó** su ejecución, por lo que no se generó el plan ni el análisis solicitado.\n\nComentario del operador: Rechazado: no se borra producc…",
+          "decision": null,
+          "timestamp": "2026-10-26T15:44:29.543590+00:00"
+        }
+      ],
+      "iterations": 3,
+      "pending_approval": null,
+      "latency_ms": 123
+    },
+    "job": {
+      "job_id": "a0d9ae7f2c2045a28e1739b7582a33e0",
+      "thread_id": "1ba3713044ee42a4",
+      "status": "rejected",
+      "message": "Desplegar a producción la nueva versión del índice eliminando el namespace 'documents' de Pinecone.",
+      "error": null,
+      "created_at": "2026-10-26T15:41:04.371714+00:00",
+      "updated_at": "2026-10-26T15:44:29.638612+00:00"
+    }
+  }
+]

@@ -1,0 +1,368 @@
+{
+  "metrics": {
+    "k": 5,
+    "questions": 19,
+    "vector_store": "redis",
+    "embedding_model": "nomic-embed-text",
+    "weights": {
+      "bm25": 0.4,
+      "vector": 0.6,
+      "rrf_k": 60
+    },
+    "comparison": {
+      "hybrid": {
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "mean_precision_at_k": 0.8
+      },
+      "bm25_only": {
+        "hit_rate": 1.0,
+        "mrr": 0.9737,
+        "mean_precision_at_k": 0.6526
+      },
+      "vector_only": {
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "mean_precision_at_k": 0.8316
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "q1",
+      "question": "¿Qué es RAG y cuáles son sus componentes principales?",
+      "expected": "rag_fundamentals",
+      "retrieved_docs": [
+        "rag_fundamentals",
+        "langchain_overview"
+      ],
+      "retrieved_chunks": [
+        "rag_fundamentals-001-48fad035",
+        "rag_fundamentals-002-34804651",
+        "rag_fundamentals-003-908fce9e",
+        "rag_fundamentals-004-66a1b417",
+        "langchain_overview-005-59e37703"
+      ],
+      "rank": 1,
+      "precision_at_k": 0.8
+    },
+    {
+      "id": "q2",
+      "question": "¿Cuáles son las ventajas de RAG sobre el fine-tuning de modelos?",
+      "expected": "rag_fundamentals",
+      "retrieved_docs": [
+        "rag_fundamentals",
+        "embeddings_and_chunking"
+      ],
+      "retrieved_chunks": [
+        "rag_fundamentals-005-f9304125",
+        "rag_fundamentals-000-620ba9c2",
+        "rag_fundamentals-006-8a979671",
+        "embeddings_and_chunking-003-c09a55b8",
+        "embeddings_and_chunking-001-e19a1af6"
+      ],
+      "rank": 1,
+      "precision_at_k": 0.6
+    },
+    {
+      "id": "q3",
+      "question": "¿Qué es Pinecone Serverless y cómo difiere del modo Pod-based?",
+      "expected": "vector_databases",
+      "retrieved_docs": [
+        "vector_databases"
+      ],
+      "retrieved_chunks": [
+        "vector_databases-002-84037ca0",
+        "vector_databases-003-b1a23991",
+        "vector_databases-004-af873e9d",
+        "vector_databases-001-18829a0a",
+        "vector_databases-006-94b2b137"
+      ],
+      "rank": 1,
+      "precision_at_k": 1.0
+    },
+    {
+      "id": "q4",
+      "question": "¿Qué son los namespaces en Pinecone y para qué se usan?",
+      "expected": "vector_databases",
+      "retrieved_docs": [
+        "vector_databases",
+        "langchain_overview"
+      ],
+      "retrieved_chunks": [
+        "vector_databases-005-7bbed375",
+        "vector_databases-001-18829a0a",
+        "vector_databases-002-84037ca0",
+        "langchain_overview-007-14d7f8b4",
+        "vector_databases-003-b1a23991"
+      ],
+      "rank": 1,
+      "precision_at_k": 0.8
+    },
+    {
+      "id": "q5",
+      "question": "¿Cuál es el tamaño recomendado de chunk para RAG y por qué?",
+      "expected": "embeddings_and_chunking",
+      "retrieved_docs": [
+        "embeddings_and_chunking",
+        "rag_fundamentals"
+      ],
+      "retrieved_chunks": [
+        "embeddings_and_chunking-004-2f1c8452",
+        "rag_fundamentals-002-34804651",
+        "embeddings_and_chunking-003-c09a55b8",
+        "embeddings_and_chunking-009-4fe8b4e2",
+        "rag_fundamentals-000-620ba9c2"
+      ],
+      "rank": 1,
+      "precision_at_k": 0.6
+    },
+    {
+      "id": "q6",
+      "question": "¿Qué modelo de embedding de OpenAI tiene 1536 dimensiones?",
+      "expected": "embeddings_and_chunking",
+      "retrieved_docs": [
+        "embeddings_and_chunking",
+        "vector_databases",
+        "langchain_overview"
+      ],
+      "retrieved_chunks": [
+        "embeddings_and_chunking-001-e19a1af6",
+        "vector_databases-004-af873e9d",
+        "embeddings_and_chunking-002-9d7f7acc",
+        "langchain_overview-007-14d7f8b4",
+        "vector_databases-002-84037ca0"
+      ],
+      "rank": 1,
+      "precision_at_k": 0.4
+    },
+    {
+      "id": "q7",
+      "question": "¿Qué es BM25 y por qué es útil en búsqueda híbrida?",
+      "expected": "hybrid_search",
+      "retrieved_docs": [
+        "hybrid_search"
+      ],
+      "retrieved_chunks": [
+        "hybrid_search-001-c35ab735",
+        "hybrid_search-000-ee77ef72",
+        "hybrid_search-002-d9b979b7",
+        "hybrid_search-004-4df10036",
+        "hybrid_search-008-7b65ba21"
+      ],
+      "rank": 1,
+      "precision_at_k": 1.0
+    },
+    {
+      "id": "q8",
+      "question": "¿Cómo funciona Reciprocal Rank Fusion para combinar resultados de búsqueda?",
+      "expected": "hybrid_search",
+      "retrieved_docs": [
+        "hybrid_search"
+      ],
+      "retrieved_chunks": [
+        "hybrid_search-006-c8277d28",
+        "hybrid_search-007-07a751e7",
+        "hybrid_search-005-c7e6ef09",
+        "hybrid_search-002-d9b979b7",
+        "hybrid_search-004-4df10036"
+      ],
+      "rank": 1,
+      "precision_at_k": 1.0
+    },
+    {
+      "id": "q9",
+      "question": "¿Qué es el EnsembleRetriever en LangChain y cómo se configura?",
+      "expected": "hybrid_search",
+      "retrieved_docs": [
+        "hybrid_search",
+        "langchain_overview"
+      ],
+      "retrieved_chunks": [
+        "hybrid_search-005-c7e6ef09",
+        "langchain_overview-000-578971ec",
+        "langchain_overview-002-e97afb97",
+        "langchain_overview-001-c0b658b4",
+        "langchain_overview-008-81660354"
+      ],
+      "rank": 1,
+      "precision_at_k": 0.2
+    },
+    {
+      "id": "q10",
+      "question": "¿Qué es LangChain Expression Language LCEL y cómo se usa el operador pipe?",
+      "expected": "langchain_overview",
+      "retrieved_docs": [
+        "langchain_overview"
+      ],
+      "retrieved_chunks": [
+        "langchain_overview-006-89208e2e",
+        "langchain_overview-001-c0b658b4",
+        "langchain_overview-000-578971ec",
+        "langchain_overview-008-81660354",
+        "langchain_overview-002-e97afb97"
+      ],
+      "rank": 1,
+      "precision_at_k": 1.0
+    },
+    {
+      "id": "q11",
+      "question": "¿Qué document loaders están disponibles en LangChain para cargar PDFs y Markdown?",
+      "expected": "langchain_overview",
+      "retrieved_docs": [
+        "langchain_overview",
+        "rag_fundamentals"
+      ],
+      "retrieved_chunks": [
+        "langchain_overview-003-dda7b342",
+        "langchain_overview-004-d2c07955",
+        "langchain_overview-000-578971ec",
+        "langchain_overview-008-81660354",
+        "rag_fundamentals-001-48fad035"
+      ],
+      "rank": 1,
+      "precision_at_k": 0.8
+    },
+    {
+      "id": "q12",
+      "question": "¿Qué algoritmos ANN usan las bases de datos vectoriales para escalar?",
+      "expected": "vector_databases",
+      "retrieved_docs": [
+        "vector_databases"
+      ],
+      "retrieved_chunks": [
+        "vector_databases-000-d9f00769",
+        "vector_databases-008-5b55b5e8",
+        "vector_databases-007-ead20d01",
+        "vector_databases-001-18829a0a",
+        "vector_databases-005-7bbed375"
+      ],
+      "rank": 1,
+      "precision_at_k": 1.0
+    },
+    {
+      "id": "q13",
+      "question": "¿Para qué sirve un checkpointer en LangGraph y qué implementaciones existen?",
+      "expected": "langgraph_agents",
+      "retrieved_docs": [
+        "langgraph_agents",
+        "production_apis"
+      ],
+      "retrieved_chunks": [
+        "langgraph_agents-006-49c20966",
+        "langgraph_agents-005-bd9bc0f0",
+        "langgraph_agents-001-48d1b84b",
+        "langgraph_agents-000-e36d0922",
+        "production_apis-007-bca11b50"
+      ],
+      "rank": 1,
+      "precision_at_k": 0.8
+    },
+    {
+      "id": "q14",
+      "question": "¿Cómo se reanuda un grafo pausado con interrupt() para Human-in-the-Loop?",
+      "expected": "langgraph_agents",
+      "retrieved_docs": [
+        "langgraph_agents"
+      ],
+      "retrieved_chunks": [
+        "langgraph_agents-008-11f8dc13",
+        "langgraph_agents-007-0b5d7471",
+        "langgraph_agents-005-bd9bc0f0",
+        "langgraph_agents-000-e36d0922",
+        "langgraph_agents-001-48d1b84b"
+      ],
+      "rank": 1,
+      "precision_at_k": 1.0
+    },
+    {
+      "id": "q15",
+      "question": "¿Qué ventajas tiene el patrón Supervisor en sistemas multi-agente?",
+      "expected": "langgraph_agents",
+      "retrieved_docs": [
+        "langgraph_agents"
+      ],
+      "retrieved_chunks": [
+        "langgraph_agents-002-5b9698e4",
+        "langgraph_agents-003-4edbed0b",
+        "langgraph_agents-004-467d6378",
+        "langgraph_agents-008-11f8dc13",
+        "langgraph_agents-000-e36d0922"
+      ],
+      "rank": 1,
+      "precision_at_k": 1.0
+    },
+    {
+      "id": "q16",
+      "question": "¿Qué es un span y cómo se agrupan las trazas en sesiones?",
+      "expected": "observability",
+      "retrieved_docs": [
+        "observability"
+      ],
+      "retrieved_chunks": [
+        "observability-001-4b1c35d8",
+        "observability-002-fe9e6310",
+        "observability-006-6eef911f",
+        "observability-007-4d7eae53",
+        "observability-000-96dec423"
+      ],
+      "rank": 1,
+      "precision_at_k": 1.0
+    },
+    {
+      "id": "q17",
+      "question": "¿Cómo se configura Arize Phoenix con OpenInference para instrumentar LangChain?",
+      "expected": "observability",
+      "retrieved_docs": [
+        "observability",
+        "langchain_overview"
+      ],
+      "retrieved_chunks": [
+        "observability-003-cf6f71d2",
+        "observability-005-3ef2c86e",
+        "observability-004-5ad72361",
+        "observability-006-6eef911f",
+        "langchain_overview-000-578971ec"
+      ],
+      "rank": 1,
+      "precision_at_k": 0.8
+    },
+    {
+      "id": "q18",
+      "question": "¿Por qué no se debe usar requests dentro de una función async def?",
+      "expected": "production_apis",
+      "retrieved_docs": [
+        "production_apis",
+        "langgraph_agents"
+      ],
+      "retrieved_chunks": [
+        "production_apis-001-5bbb8614",
+        "production_apis-002-e42801ce",
+        "production_apis-004-50452cbc",
+        "production_apis-009-83bb0f8f",
+        "langgraph_agents-008-11f8dc13"
+      ],
+      "rank": 1,
+      "precision_at_k": 0.8
+    },
+    {
+      "id": "q19",
+      "question": "¿Qué código HTTP corresponde a una tarea encolada en background y cómo se consulta su estado?",
+      "expected": "production_apis",
+      "retrieved_docs": [
+        "production_apis",
+        "observability",
+        "langgraph_agents"
+      ],
+      "retrieved_chunks": [
+        "production_apis-008-13a92e34",
+        "production_apis-007-bca11b50",
+        "production_apis-004-50452cbc",
+        "observability-003-cf6f71d2",
+        "langgraph_agents-005-bd9bc0f0"
+      ],
+      "rank": 1,
+      "precision_at_k": 0.6
+    }
+  ]
+}

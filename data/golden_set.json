@@ -1,0 +1,116 @@
+[
+  {
+    "id": "q1",
+    "pregunta": "¿Qué es RAG y cuáles son sus componentes principales?",
+    "documento_id_esperado": "rag_fundamentals",
+    "descripcion": "Pregunta sobre fundamentos de RAG"
+  },
+  {
+    "id": "q2",
+    "pregunta": "¿Cuáles son las ventajas de RAG sobre el fine-tuning de modelos?",
+    "documento_id_esperado": "rag_fundamentals",
+    "descripcion": "Comparación RAG vs fine-tuning"
+  },
+  {
+    "id": "q3",
+    "pregunta": "¿Qué es Pinecone Serverless y cómo difiere del modo Pod-based?",
+    "documento_id_esperado": "vector_databases",
+    "descripcion": "Pregunta sobre tipos de despliegue en Pinecone"
+  },
+  {
+    "id": "q4",
+    "pregunta": "¿Qué son los namespaces en Pinecone y para qué se usan?",
+    "documento_id_esperado": "vector_databases",
+    "descripcion": "Pregunta sobre namespaces en Pinecone"
+  },
+  {
+    "id": "q5",
+    "pregunta": "¿Cuál es el tamaño recomendado de chunk para RAG y por qué?",
+    "documento_id_esperado": "embeddings_and_chunking",
+    "descripcion": "Pregunta sobre estrategia de chunking"
+  },
+  {
+    "id": "q6",
+    "pregunta": "¿Qué modelo de embedding de OpenAI tiene 1536 dimensiones?",
+    "documento_id_esperado": "embeddings_and_chunking",
+    "descripcion": "Pregunta sobre modelos de embedding"
+  },
+  {
+    "id": "q7",
+    "pregunta": "¿Qué es BM25 y por qué es útil en búsqueda híbrida?",
+    "documento_id_esperado": "hybrid_search",
+    "descripcion": "Pregunta sobre BM25"
+  },
+  {
+    "id": "q8",
+    "pregunta": "¿Cómo funciona Reciprocal Rank Fusion para combinar resultados de búsqueda?",
+    "documento_id_esperado": "hybrid_search",
+    "descripcion": "Pregunta sobre RRF"
+  },
+  {
+    "id": "q9",
+    "pregunta": "¿Qué es el EnsembleRetriever en LangChain y cómo se configura?",
+    "documento_id_esperado": "hybrid_search",
+    "descripcion": "Pregunta sobre EnsembleRetriever"
+  },
+  {
+    "id": "q10",
+    "pregunta": "¿Qué es LangChain Expression Language LCEL y cómo se usa el operador pipe?",
+    "documento_id_esperado": "langchain_overview",
+    "descripcion": "Pregunta sobre LCEL"
+  },
+  {
+    "id": "q11",
+    "pregunta": "¿Qué document loaders están disponibles en LangChain para cargar PDFs y Markdown?",
+    "documento_id_esperado": "langchain_overview",
+    "descripcion": "Pregunta sobre document loaders"
+  },
+  {
+    "id": "q12",
+    "pregunta": "¿Qué algoritmos ANN usan las bases de datos vectoriales para escalar?",
+    "documento_id_esperado": "vector_databases",
+    "descripcion": "Pregunta sobre algoritmos ANN"
+  },
+  {
+    "id": "q13",
+    "pregunta": "¿Para qué sirve un checkpointer en LangGraph y qué implementaciones existen?",
+    "documento_id_esperado": "langgraph_agents",
+    "descripcion": "Persistencia de estado"
+  },
+  {
+    "id": "q14",
+    "pregunta": "¿Cómo se reanuda un grafo pausado con interrupt() para Human-in-the-Loop?",
+    "documento_id_esperado": "langgraph_agents",
+    "descripcion": "HITL"
+  },
+  {
+    "id": "q15",
+    "pregunta": "¿Qué ventajas tiene el patrón Supervisor en sistemas multi-agente?",
+    "documento_id_esperado": "langgraph_agents",
+    "descripcion": "Patrón supervisor"
+  },
+  {
+    "id": "q16",
+    "pregunta": "¿Qué es un span y cómo se agrupan las trazas en sesiones?",
+    "documento_id_esperado": "observability",
+    "descripcion": "Conceptos de trazas"
+  },
+  {
+    "id": "q17",
+    "pregunta": "¿Cómo se configura Arize Phoenix con OpenInference para instrumentar LangChain?",
+    "documento_id_esperado": "observability",
+    "descripcion": "Phoenix"
+  },
+  {
+    "id": "q18",
+    "pregunta": "¿Por qué no se debe usar requests dentro de una función async def?",
+    "documento_id_esperado": "production_apis",
+    "descripcion": "Asincronía"
+  },
+  {
+    "id": "q19",
+    "pregunta": "¿Qué código HTTP corresponde a una tarea encolada en background y cómo se consulta su estado?",
+    "documento_id_esperado": "production_apis",
+    "descripcion": "Tareas background"
+  }
+]

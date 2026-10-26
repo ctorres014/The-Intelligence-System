@@ -1,0 +1,49 @@
+name: intelligence-system
+
+services:
+  redis:
+    # Redis 8 incluye el Query Engine (RediSearch/RedisJSON): lo usan el
+    # checkpointer de LangGraph y el índice vectorial del RAG.
+    image: redis:8.2.10-alpine
+    command: ["redis-server", "--appendonly", "yes", "--save", "60", "1"]
+    ports:
+      - "${REDIS_HOST_PORT:-6380}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  phoenix:
+    image: arizephoenix/phoenix:version-20.24.0
+    environment:
+      - PHOENIX_WORKING_DIR=/mnt/data
+    ports:
+      - "${PHOENIX_PORT:-6006}:6006"
+    volumes:
+      - phoenix_data:/mnt/data
+
+  api:
+    build: .
+    env_file: .env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - PHOENIX_COLLECTOR_ENDPOINT=http://phoenix:6006
+      # Ollama corriendo en el host (si se usa LLM_PROVIDER=ollama)
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL_DOCKER:-http://host.docker.internal:11434}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${API_PORT:-8000}:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+      phoenix:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  phoenix_data:

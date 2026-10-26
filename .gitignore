@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -218,3 +219,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+=======
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+.idea/
+.vscode/
+*.log
+>>>>>>> fa48c82 (initial commit)
